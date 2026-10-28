@@ -1,0 +1,25 @@
+[Unit]
+Description=Announce wlan0 IPv4 through the Unitree audio SDK
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+# Address/TTS readiness is handled in the process; do not hold up boot targets.
+Type=simple
+RemainAfterExit=yes
+User=@RUN_USER@
+Group=@RUN_GROUP@
+WorkingDirectory=@PROJECT_DIR@
+Environment="PYTHONUNBUFFERED=1"
+Environment="CYCLONEDDS_HOME=@PROJECT_DIR@/.deps/cyclonedds"
+Environment="LD_LIBRARY_PATH=@PROJECT_DIR@/.deps/cyclonedds/lib"
+ExecStart=@PROJECT_DIR@/.venv/bin/unitree-ip-announcer announce --config /etc/unitree-ip-announcer/config.toml
+Restart=on-failure
+RestartSec=15s
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=unitree-ip-announcer
+
+[Install]
+WantedBy=multi-user.target

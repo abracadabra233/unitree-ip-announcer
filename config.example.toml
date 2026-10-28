@@ -1,0 +1,23 @@
+# 只播报 wlan0 的 IPv4；无需连接互联网。
+[network]
+stable_seconds = 3.0
+poll_interval_seconds = 1.0
+
+[audio]
+# SDK 通过机器人内部网络访问语音服务，与被播报的 wlan0 分开。
+dds_interface = "eth0"
+domain_id = 0
+speaker_id = 0
+rpc_timeout_seconds = 5.0
+# 默认使用机器人当前音量；需要修改时取消下一行注释（0–100）。
+# volume = 70
+
+[announcement]
+repeat = 1
+# TTS 接口没有播放完成通知，多次播报时留出足够的间隔。
+interval_seconds = 15.0
+
+[retry]
+interval_seconds = 5.0
+# 一次运行的等待预算；失败以非零状态退出，systemd 可再次启动。
+attempt_timeout_seconds = 180.0
